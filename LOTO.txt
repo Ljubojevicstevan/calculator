@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <time.h>
+HANDLE hKonzola;
+CONSOLE_SCREEN_BUFFER_INFO konzolaInfo;
+CONSOLE_CURSOR_INFO kursorInfo;
+char naslovKonzole[80];
+static HANDLE hSemaphoreIspisiLOTOKombinaciju,
+hSemaphoreGenerisiLOTOKombinaciju;
+static int LOTOKombinacija[7] = {0,0,0,0,0,0,0,0};
+static int maxBrojKombinacija = 10;
+static int trenutniBrojKombinacija = 0;
+void Inicijalizacija(char *naslov)
+{
+ hKonzola = GetStdHandle(STD_OUTPUT_HANDLE);
+ GetConsoleScreenBufferInfo( hKonzola, &konzolaInfo );
+ OcistiEkran();
+ SetConsoleTitle(naslov);
+}
+void OcistiEkran()
+{
+ DWORD dummy;
+ COORD pocetak = { 0, 0 };
+ FillConsoleOutputCharacter( hKonzola, ' ',
+ konzolaInfo.dwSize.X *
+konzolaInfo.dwSize.Y,
+pocetak,&dummy );
+ kursorInfo.dwSize = 1;
+ kursorInfo.bVisible = FALSE;
+ SetConsoleCursorInfo( hKonzola, &kursorInfo );
+}
+int randomNumber(int donjaGranica, int gornjaGranica)
+{
+ Sleep(200);
+ srand(time(NULL));
+ return donjaGranica + rand() % (gornjaGranica - donjaGranica + 1);
+}
+void SortirajNiz(int *niz[], int aSize)
+{
+ int i,j;
+ for (i = 0; i<aSize-1;i++)
+ {
+ int minV = niz[i];
+ for (j=i+1;j<aSize;j++)
+ {
+ if (minV>niz[j])
+ {
+ int tmp = niz[j];
+ niz[i] = niz[j];
+ niz[j] = minV;
+ minV =niz[i];
+ }
+ }
+ }
+}
+void IspisiNiz(int niz[],int aSize, char *nazivNiza)
+{
+ int i;
+ printf(nazivNiza);
+ for (i = 0; i<aSize;i++)
+ {
+ printf(" %d",niz[i]);
+ }
+ printf("\n");
+}
+DWORD WINAPI GenerisiLOTOThread(LPVOID lpParam);
+DWORD WINAPI IspisiLOTOThread(LPVOID lpParam);
+int main()
+{
+ DWORD pidGenerisiLOTO, pidIspisiLOTO;
+ HANDLE hGenerisiLOTOThread, hIspisiLOTOThread;
+ sprintf(naslovKonzole, "OSVezba09a - LOTO - Binarni Semafori");
+ Inicijalizacija(naslovKonzole);
+ hSemaphoreIspisiLOTOKombinaciju = CreateSemaphore(NULL, 0, 1, NULL);
+ hSemaphoreGenerisiLOTOKombinaciju = CreateSemaphore(NULL, 1, 1, NULL);
+ hGenerisiLOTOThread = CreateThread( NULL, 0, GenerisiLOTOThread, (LPVOID)NULL, 0, &pidGenerisiLOTO);
+ hIspisiLOTOThread = CreateThread( NULL, 0, IspisiLOTOThread, (LPVOID)NULL, 0, &pidIspisiLOTO);
+ WaitForSingleObject(hIspisiLOTOThread,INFINITE);
+ CloseHandle(hGenerisiLOTOThread);
+ CloseHandle(hIspisiLOTOThread);
+ CloseHandle(hSemaphoreIspisiLOTOKombinaciju);
+ CloseHandle(hSemaphoreGenerisiLOTOKombinaciju);
+ sprintf(naslovKonzole, "Sve niti su zavrsene.");
+ SetConsoleTitle(naslovKonzole);
+ return 0;
+}
+DWORD WINAPI IspisiLOTOThread(LPVOID lpParam)
+{
+ while(trenutniBrojKombinacija<maxBrojKombinacija)
+ {
+ WaitForSingleObject(hSemaphoreIspisiLOTOKombinaciju, INFINITE);
+
+ SortirajNiz(LOTOKombinacija,7);
+ IspisiNiz(LOTOKombinacija,7,"Loto kombinacija: ");
+ Sleep(500);
+ ReleaseSemaphore(hSemaphoreGenerisiLOTOKombinaciju, 1, NULL);
+ }
+ return 0;
+}
+DWORD WINAPI GenerisiLOTOThread( LPVOID lpParam )
+{
+ int i;
+ while(trenutniBrojKombinacija<maxBrojKombinacija)
+ {
+ WaitForSingleObject(hSemaphoreGenerisiLOTOKombinaciju, INFINITE);
+ printf("LOTO Kombinacija je zapocela generisanje....\n");
+ printf("Generisan: ");
+ int brojUspesnih = 0;
+ while(brojUspesnih<7)
+ {
+ BOOL dodajUNiz =TRUE;
+ int broj = randomNumber(1,39);
+ for(i=0; i<=brojUspesnih-1; ++i)
+ if (LOTOKombinacija[i]==broj)
+ {
+ dodajUNiz=FALSE;
+break;
+ }
+ if (dodajUNiz)
+ {
+ LOTOKombinacija[i] = broj;
+ brojUspesnih++;
+ if (brojUspesnih==7) printf("%d",brojUspesnih);
+ else printf("%d, ",brojUspesnih);
+ }
+ }
+ trenutniBrojKombinacija++;
+printf("\nGenerisana loto kombinacija %d... Poziva se Sortiranje i
+ispis:\n", trenutniBrojKombinacija);
+ Sleep(1000);
+ ReleaseSemaphore(hSemaphoreIspisiLOTOKombinaciju, 1, NULL);
+ }
+ return 0;
+}

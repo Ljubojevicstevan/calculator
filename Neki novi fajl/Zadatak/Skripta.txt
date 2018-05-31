@@ -1,0 +1,129 @@
+	//================================================================
+// 
+//================================================================
+
+//-----------------------------------------------------------
+// PRESS CTRL R TO RENAME WOW'S IF YOU LAUNCH THEM MANUALLY
+//-----------------------------------------------------------
+
+
+//-----------------------------------------------------------
+// DEFINE MAIL LABELS FOR SENDING KEY STROKES
+//-----------------------------------------------------------
+<Label o1 Local SendWin OSRS1>
+<Label o2 Local SendWin OSRS2>
+<Label o3 Local SendWin OSRS3>
+<Label o4 Local SendWin OSRS4>
+<Label o5 Local SendWin OSRS5>
+<Label o6 Local SendWin OSRS6>
+
+
+//-----------------------------------------------------------
+// USE TO TOGGLE BETWEEN THE TWO WOW CLIENTS
+//-----------------------------------------------------------
+<Hotkey ScrollLockOn Ctrl Tab>
+   <Toggle>
+      <TargetWin OSRS1>
+      <SetForegroundWin>
+   <Toggle>
+      <TargetWin OSRS2>
+      <SetForegroundWin>
+   <Toggle>
+      <TargetWin OSRS3>
+      <SetForegroundWin>
+   <Toggle>
+      <TargetWin OSRS4>
+      <SetForegroundWin>
+   <Toggle>
+      <TargetWin OSRS5>
+      <SetForegroundWin>
+   <Toggle>
+      <TargetWin OSRS6>
+      <SetForegroundWin>
+
+//-----------------------------------------------------------
+// SPLIT SCREEN WINDOW CONFIG. EACH CLIENT TAKES UP HALF THE
+// PRIMARY MONITOR. GOOD FOR LOG IN SCREEN.
+//-----------------------------------------------------------
+<Hotkey ScrollLockOn Ctrl F2>
+	<TargetWin OSRS1>
+	<SetWinPos 0 0> 
+	<SetWinSize 840 530>
+
+	<TargetWin OSRS2>
+	<SetWinPos 842 0>
+	<SetWinSize 840 530>
+
+	<TargetWin OSRS3>
+	<SetWinPos 1684 0>
+	<SetWinSize 840 530>
+
+	<TargetWin OSRS4>
+	<SetWinPos 0 535>
+	<SetWinSize 840 530>
+
+	<TargetWin OSRS5>
+	<SetWinPos 842 535>
+	<SetWinSize 840 530>
+
+	<TargetWin OSRS6>
+	<SetWinPos 1684 535>
+	<SetWinSize 840 530>
+	
+	
+//-----------------------------------------------------------
+// DEFINE HOTKEYS FOR ALL KEY COMBINATIONS THAT WILL GET
+// SENT TO BOTH WOWS. ADD MORE KEY COMBO'S IF YOU WANT.
+//-----------------------------------------------------------
+<Hotkey ScrollLockOn 0-9, Plus, Minus, Space,a-z,A-Z,Backspace,Enter>
+	<SendLabel o1, o2, o3, o4, o5, o6>
+	<Key %Trigger%>
+
+
+<Hotkey ScrollLockOn Alt Ctrl Enter>
+	<SendLabel o1, o2, o3, o4, o5, o6>
+	<Key %Trigger%>
+
+//-----------------------------------------------------------
+// DEFINE MOVEMENT KEYS THAT WILL GET SENT TO BOTH WOW'S.
+// ADD MORE KEYS IF YOU WANT.
+//-----------------------------------------------------------
+<MovementHotkey ScrollLockOn Numpad1-Numpad6>
+	<If ActiveWinIs OSRS1>
+		<SendLabel o2, o3, o4, o5, o6>
+		<Key %Trigger%> 
+	<If ActiveWinIs OSRS2>
+		<SendLabel o1, o3, o4, o5, o6>
+		<Key %Trigger%>
+	<If ActiveWinIs OSRS3>
+		<SendLabel o1, o2, o4, o5, o6>
+		<Key %Trigger%>
+	<Else if ActiveWinIs OSRS4>
+		<SendLabel o1, o3, o2, o5, o6>
+		<Key %Trigger%>
+	<Else if ActiveWinIs OSRS5>
+		<SendLabel o1, o3, o2, o4, o6>
+		<Key %Trigger%>
+	<Else if ActiveWinIs OSRS6>
+		<SendLabel o1, o3, o2, o5, o4>
+		<Key %Trigger%>
+
+<UseKeyAsModifier Oem3>
+
+<Hotkey ScrollLockOn Oem3 LButton, MButton, RButton, Button4, Button5>
+   <SendLabel o1, o2, o3, o4, o5, o6>
+      <ClickMouse %TriggerMainKey%>
+
+<Hotkey ScrollLockOn Ctrl F3>
+   <TargetWin OSRS1>
+   <CloseWin>
+   <TargetWin OSRS2>
+   <CloseWin>
+   <TargetWin OSRS3>
+   <CloseWin>
+   <TargetWin OSRS4>
+   <CloseWin>
+   <TargetWin OSRS5>
+   <CloseWin>
+   <TargetWin OSRS6>
+   <CloseWin>

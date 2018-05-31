@@ -1,0 +1,36 @@
+   
+
+ 
+ 
+    
+    Internet marketing
+    Razvoj i održavanje efektivnog WEB sajta
+    Internet aplikacije za elektronsko poslovanje  
+   
+    Internet protokoli
+    Dokument menadžment sistemi  
+    DNS i domeni i Adresiranje na Internetu
+    LAN mreže, topologija i prenosni medijumi
+    Ethernet i VLAN , WAN mreže
+    Wireless mreže
+    xDSL tehnologije
+    Internet i mobilni uredaji, WAP standard I WAP servisi
+    HTTP protokol, staticke i dinamicke Web stranice
+    Markerski jezici
+    Skript jezici
+    Web tehnologije – Java i JSP
+    MS .NET Framework i ASP.NET
+    Open source tehnologije
+    Pretnje sigurnosti podataka i Firewall sistemi
+    SSL protocol I SSH (Secure Shell)
+    Privatnost podataka na Internetu
+
+
+
+
+
+
+
+Internet poslovni modeli
+Tehnološki okvir elektronskog poslovanja
+
